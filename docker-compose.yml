@@ -1,0 +1,17 @@
+#https://docs.docker.com/samples/django/
+
+version: "3"
+
+services:
+  web:
+    container_name: django
+    build:
+      context: .
+      args:
+        PYTHON_VERSION: 3.8.10
+    ports:
+      - "80:8000"
+      - "443:8443"
+    volumes:
+      - .:/code
+    command: python manage.py runserver 0.0.0.0:8000
