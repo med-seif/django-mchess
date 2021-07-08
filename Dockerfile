@@ -8,6 +8,6 @@ WORKDIR ./code
 
 RUN python -m pip install Django
 
-RUN python pip install psycopg2-binary
+RUN python -m pip install psycopg2-binary
 
 EXPOSE 8000

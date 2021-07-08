@@ -19,9 +19,13 @@ services:
       - db
   db:
     image: postgres
+    ports:
+      - "5432:5432"
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=mchess
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+volumes:
+  dbdata:
