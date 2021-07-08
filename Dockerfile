@@ -4,8 +4,10 @@ FROM python:${PYTHON_VERSION}
 
 RUN apt-get update
 
-WORKDIR /code
+WORKDIR ./code
 
 RUN python -m pip install Django
+
+RUN python pip install psycopg2-binary
 
 EXPOSE 8000
