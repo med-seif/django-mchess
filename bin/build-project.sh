@@ -18,7 +18,4 @@ sudo chmod -R a+wrx "$PROJECT_NAME"
 # add our host to Django
 sed -i 's/ALLOWED_HOSTS = \[]/ALLOWED_HOSTS = \['\''*'\'']/' "$PROJECT_NAME"/settings.py
 
-# go go go
-docker-compose up -d
-
 # inspired by a tutorial ,for more details,see : https://docs.docker.com/samples/django/
