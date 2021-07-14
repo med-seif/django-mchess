@@ -1,14 +1,22 @@
+from django.http import HttpRequest, HttpResponse
+from .models import Game
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
-import requests
-import json
-
+from django.core.paginator import Paginator
+from chessdotcom import *
 
 # Create your views here.
 def index(request: HttpRequest):
-    response = HttpResponse()
-    result = requests.get('https://api.chess.com/pub/player/seiftn/games/2021/06')
-    result_json = result.json()
+    def get_paged_games(n: int):
+        games = Game.objects.all()
+        return Paginator(games, 20).page(n)
 
-    return HttpResponse(result.json())
+    page = 1
+    if request.GET.get('page'):
+        page = request.GET.get('page')
+
+    context = {
+        'games': get_paged_games(page),
+        'archives': get_player_game_archives('seiftn').archives
+    }
+    return render(request, 'client/games/index.html', context)
+

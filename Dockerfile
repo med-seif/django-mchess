@@ -6,6 +6,6 @@ RUN apt-get update
 
 WORKDIR ./code
 
-RUN python -m pip install Django requests psycopg2-binary
+RUN python -m pip install Django requests psycopg2-binary chess.com django-seed
 
 EXPOSE 8000
