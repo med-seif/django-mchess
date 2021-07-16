@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class Command(BaseCommand):
-    help = 'Load games in database by a monthly archive'
+    help = 'Generates a monthly archive in JSON ready file to be loaded in database with loaddata python command'
 
     def add_arguments(self, parser):
         parser.add_argument('period', type=str, help='MM/YY')
@@ -45,6 +45,13 @@ class Command(BaseCommand):
             else:
                 return gdata.white.result
 
+        def get_player_country(gdata):
+            player_profile = chessdotcom.get_player_profile(get_opponent_username(gdata))
+            country_url_api = player_profile.player.country
+            country_url_api_parts = country_url_api.split('/')
+            country_url_api_parts.reverse()
+            return country_url_api_parts[0]
+
         listperiod = options['period'].split('/')
         data = chessdotcom.get_player_games_by_month('seiftn', listperiod[1], listperiod[0])
         formatted_rows_list = []
@@ -65,6 +72,7 @@ class Command(BaseCommand):
                         'my_color': get_my_color(g),
                         'pgn': g.pgn,
                         'result': get_result(g),
+                        'opponent_country': get_player_country(g)
                     }
                 }
             )

@@ -3,6 +3,6 @@ CONTAINER_NAME='django' # see docker-compose.yml if you want to change this para
 
 [ -z "$1" ] && echo "Please specify a valid django admin command" && exit
 
-sudo docker exec $CONTAINER_NAME python manage.py "$@"
+sudo docker exec -it $CONTAINER_NAME python manage.py "$@"
 
 ./bin/fixowns.sh
