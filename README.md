@@ -1,0 +1,3 @@
+# django-mchess
+
+Documentation soon
