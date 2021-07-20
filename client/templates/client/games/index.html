@@ -1,3 +1,4 @@
+{% load filters %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,45 +15,40 @@
 <body>
 
 <div class="container-fluid">
-    <!--
-    {% if archives %}
-        {% for archive in archives %}
-            <div>.......
-                {{ archive }}
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No archives are available.</p>
-    {% endif %}
-    -->
-
-
     {% if games %}
         <span class="badge badge-primary">Primary</span>
-        <table class="table table-striped">
-            <thead>
+        <table class="table">
+            <thead class="table-dark">
             <tr>
                 <th scope="col">#</th>
-                <th>Date</th>
-                <th scope="col">Time Class</th>
+                <th>Start</th>
+                <th>End</th>
                 <th>Opponent</th>
-                <th>Country</th>
                 <th>My Rating</th>
                 <th>Color</th>
-                <th>Result</th>
+                <th>Termination</th>
+                <th>Country</th>
+                <th>Opening</th>
             </tr>
             </thead>
             <tbody>
             {% for game in games %}
-                <tr>
+                {% if game.result == 'win' %}
+                    <tr class="table-success">
+                {% elif game.result == 'draw' %}
+                    <tr class="table-warning">
+                {% else %}
+                    <tr class="table-danger">
+                {% endif %}
                     <td><a target="_blank" href="https://www.chess.com/game/live/{{ game.id }}">{{ game.id }}</a></td>
-                    <td>{{ game.game_date }}</td>
-                    <td>{{ game.time_class }}</td>
+                    <td>{{ game.game_date | date:'d b Y'}} [{{ game.game_time | date:'H:i:s'}}]</td>
+                    <td>{{ game.game_end_date | date:'d b Y'}} [{{ game.game_end_time | date:'H:i:s'}}]</td>
                     <td><span class="badge bg-secondary">{{ game.opponent_rating }}</span></td>
-                    <td>{{ game.opponent_country }}</td>
                     <td><span class="badge bg-secondary">{{ game.my_rating }}</span></td>
                     <td>{{ game.my_color }}</td>
-                    <td>{{ game.result }}</td>
+                    <td>{{ game.result_detail }}</td>
+                    <td>{{ game.opponent_country | country_name_from_code }}</td>
+                    <td><a target="_blank" href="{{ game.eco_url }}">{{ game.eco }}</a></td>
                 </tr>
             {% endfor %}
         </table>
