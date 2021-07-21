@@ -1,4 +1,4 @@
-{% load filters %}
+{% load custom_tags_filters %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -23,8 +23,8 @@
                 <th scope="col">#</th>
                 <th>Start</th>
                 <th>End</th>
-                <th>Opponent</th>
-                <th>My Rating</th>
+                <th>Rating</th>
+                <th>O Rating</th>
                 <th>Color</th>
                 <th>Termination</th>
                 <th>Country</th>
@@ -35,21 +35,21 @@
             {% for game in games %}
                 {% if game.result == 'win' %}
                     <tr class="table-success">
-                {% elif game.result == 'draw' %}
+                        {% elif game.result == 'draw' %}
                     <tr class="table-warning">
-                {% else %}
+                        {% else %}
                     <tr class="table-danger">
                 {% endif %}
-                    <td><a target="_blank" href="https://www.chess.com/game/live/{{ game.id }}">{{ game.id }}</a></td>
-                    <td>{{ game.game_date | date:'d b Y'}} [{{ game.game_time | date:'H:i:s'}}]</td>
-                    <td>{{ game.game_end_date | date:'d b Y'}} [{{ game.game_end_time | date:'H:i:s'}}]</td>
-                    <td><span class="badge bg-secondary">{{ game.opponent_rating }}</span></td>
-                    <td><span class="badge bg-secondary">{{ game.my_rating }}</span></td>
-                    <td>{{ game.my_color }}</td>
-                    <td>{{ game.result_detail }}</td>
-                    <td>{{ game.opponent_country | country_name_from_code }}</td>
-                    <td><a target="_blank" href="{{ game.eco_url }}">{{ game.eco }}</a></td>
-                </tr>
+            <td><a target="_blank" href="https://www.chess.com/game/live/{{ game.id }}">{{ game.id }}</a></td>
+            <td>{{ game.game_date | date:'d b Y' }} [{{ game.game_time | date:'H:i:s' }}]</td>
+            <td>{{ game.game_end_date | date:'d b Y' }} [{{ game.game_end_time | date:'H:i:s' }}]</td>
+            <td>{{ game.my_rating }}</td>
+            <td>{{ game.opponent_rating }}</td>
+            <td>{{ game.my_color }}</td>
+            <td>{{ game.result_detail }}</td>
+            <td>{% show_country_flag game.opponent_country %}</td>
+            <td><a target="_blank" href="{{ game.eco_url }}">{{ game.eco }}</a></td>
+            </tr>
             {% endfor %}
         </table>
     {% else %}
@@ -62,7 +62,7 @@
                 <li class="page-item"><a class="page-link" href="?page={{ games.previous_page_number }}">-</a></li>
             {% endif %}
             <li class="page-item active" aria-current="page">
-             <span class="page-link">{{ games.number }} of {{ games.paginator.num_pages }}</span>
+                <span class="page-link">{{ games.number }} of {{ games.paginator.num_pages }}</span>
             </li>
             {% if games.has_next %}
                 <li class="page-item"><a class="page-link" href="?page={{ games.next_page_number }}">+</a></li>

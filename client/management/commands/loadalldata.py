@@ -1,14 +1,13 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.core import management
+import os
+from django.conf import settings
 
 class Command(BaseCommand):
-    help = 'Generates all fixtures for all archives at once'
+    help = "Load to DB all fixtures files, many calls to built in django command loaddata"
 
     def handle(self, *args, **options):
-        management.call_command('loaddata', 'games_2020_04.json')
-        management.call_command('loaddata', 'games_2021_03.json')
-        management.call_command('loaddata', 'games_2021_04.json')
-        management.call_command('loaddata', 'games_2021_05.json')
-        management.call_command('loaddata', 'games_2021_06.json')
-        management.call_command('loaddata', 'games_2021_07.json')
-        self.stdout.write(self.style.SUCCESS('Data was loaded successfully in database'))
+        files = os.scandir(settings.PROJECT_PATH+'/client/fixtures')
+        for f in files:
+            management.call_command('loaddata', f.name)
+        self.stdout.write(self.style.SUCCESS('Data was saved successfully in database'))

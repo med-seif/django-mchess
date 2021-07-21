@@ -9,7 +9,7 @@ from chessdotcom import *
 def index(request: HttpRequest):
     def get_paged_games(n: int):
         games = Game.objects.all().order_by('game_date','game_time')
-        return Paginator(games, 20).page(n)
+        return Paginator(games, 15).page(n)
 
     page = 1
     if request.GET.get('page'):

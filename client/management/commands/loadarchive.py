@@ -70,41 +70,13 @@ class Command(BaseCommand):
         def get_eco_url(pgn_parsed_data):
             return pgn_parsed_data.tag_pairs['ECOUrl']
 
-        def get_game_date(pgn_parsed_data):
-            utc_date = pgn_parsed_data.tag_pairs['UTCDate']
-            utc_time = pgn_parsed_data.tag_pairs['UTCTime']
-            date = datetime.datetime.strptime(utc_date + ' ' + utc_time, '%Y.%m.%d %H:%M:%S')
+        def get_game_date_time(pgn_parsed_data, utc_date_key, utc_time_key, date_time_format):
+            utc_date_key = pgn_parsed_data.tag_pairs[utc_date_key]
+            utc_time_key = pgn_parsed_data.tag_pairs[utc_time_key]
+            date = datetime.datetime.strptime(utc_date_key + ' ' + utc_time_key, '%Y.%m.%d %H:%M:%S')
             # utc is the default timezone, we will convert from
             date = date.astimezone(timezone('US/EASTERN'))
-            date_format = '%Y-%m-%d'
-            return date.strftime(date_format)
-
-        def get_game_time(pgn_parsed_data):
-            utc_date = pgn_parsed_data.tag_pairs['UTCDate']
-            utc_time = pgn_parsed_data.tag_pairs['UTCTime']
-            date = datetime.datetime.strptime(utc_date + ' ' + utc_time, '%Y.%m.%d %H:%M:%S')
-            # utc is the default timezone, we will convert from
-            date = date.astimezone(timezone('US/EASTERN'))
-            date_format = '%H:%M:%S'
-            return date.strftime(date_format)
-
-        def get_game_end_date(pgn_parsed_data):
-            utc_date = pgn_parsed_data.tag_pairs['EndDate']
-            utc_time = pgn_parsed_data.tag_pairs['EndTime']
-            date = datetime.datetime.strptime(utc_date + ' ' + utc_time, '%Y.%m.%d %H:%M:%S')
-            # utc is the default timezone, we will convert from
-            date = date.astimezone(timezone('US/EASTERN'))
-            date_format = '%Y-%m-%d'
-            return date.strftime(date_format)
-
-        def get_game_end_time(pgn_parsed_data):
-            utc_date = pgn_parsed_data.tag_pairs['EndDate']
-            utc_time = pgn_parsed_data.tag_pairs['EndTime']
-            date = datetime.datetime.strptime(utc_date + ' ' + utc_time, '%Y.%m.%d %H:%M:%S')
-            # utc is the default timezone, we will convert from
-            date = date.astimezone(timezone('US/EASTERN'))
-            date_format = '%H:%M:%S'
-            return date.strftime(date_format)
+            return date.strftime(date_time_format)
 
         def get_player_country(gdata):
             player_profile = chessdotcom.get_player_profile(get_opponent_username(gdata))
@@ -138,10 +110,10 @@ class Command(BaseCommand):
                         'termination': get_termination(pgn_parsed),
                         'eco': get_eco(pgn_parsed),
                         'eco_url': get_eco_url(pgn_parsed),
-                        'game_end_date': get_game_end_date(pgn_parsed),
-                        'game_end_time': get_game_end_time(pgn_parsed),
-                        'game_date': get_game_date(pgn_parsed),
-                        'game_time': get_game_time(pgn_parsed),
+                        'game_end_date': get_game_date_time(pgn_parsed,'EndDate','EndTime','%Y-%m-%d'),
+                        'game_end_time': get_game_date_time(pgn_parsed,'EndDate','EndTime','%H:%M:%S'),
+                        'game_date': get_game_date_time(pgn_parsed,'UTCDate', 'UTCTime','%Y-%m-%d'),
+                        'game_time': get_game_date_time(pgn_parsed,'UTCDate', 'UTCTime','%H:%M:%S'),
                     }
                 }
             )
