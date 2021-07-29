@@ -2,10 +2,10 @@ from django.core.management.base import BaseCommand, CommandError
 import chessdotcom
 import json
 import datetime
-from pgn_parser import parser as pgn_parser, pgn
+from client.modules.proxy import pgn_parser_proxy
 from pytz import timezone
 from django.conf import settings
-
+import hashlib
 
 class Command(BaseCommand):
     help = 'Generates a monthly archive in JSON ready file to be loaded in database with loaddata python command'
@@ -85,12 +85,15 @@ class Command(BaseCommand):
             country_url_api_parts.reverse()
             return country_url_api_parts[0]
 
+        def format_game_moves():
+            pass
+
         listperiod = options['period'].split('/')
         data = chessdotcom.get_player_games_by_month('seiftn', listperiod[1], listperiod[0])
         formatted_rows_list = []
-
+        formatted_move_rows_list = []
         for g in data.games:
-            pgn_parsed = pgn_parser.parse(g.pgn, actions=pgn.Actions())
+            pgn_parsed = pgn_parser_proxy.parse(g.pgn)
             game_id = g.url.split('/')
             game_id.reverse()
             formatted_rows_list.append(
@@ -110,14 +113,37 @@ class Command(BaseCommand):
                         'termination': get_termination(pgn_parsed),
                         'eco': get_eco(pgn_parsed),
                         'eco_url': get_eco_url(pgn_parsed),
-                        'game_end_date': get_game_date_time(pgn_parsed,'EndDate','EndTime','%Y-%m-%d'),
-                        'game_end_time': get_game_date_time(pgn_parsed,'EndDate','EndTime','%H:%M:%S'),
-                        'game_date': get_game_date_time(pgn_parsed,'UTCDate', 'UTCTime','%Y-%m-%d'),
-                        'game_time': get_game_date_time(pgn_parsed,'UTCDate', 'UTCTime','%H:%M:%S'),
+                        'game_end_date': get_game_date_time(pgn_parsed, 'EndDate', 'EndTime', '%Y-%m-%d'),
+                        'game_end_time': get_game_date_time(pgn_parsed, 'EndDate', 'EndTime', '%H:%M:%S'),
+                        'game_date': get_game_date_time(pgn_parsed, 'UTCDate', 'UTCTime', '%Y-%m-%d'),
+                        'game_time': get_game_date_time(pgn_parsed, 'UTCDate', 'UTCTime', '%H:%M:%S'),
+                        'moves_number' : len(pgn_parsed.formatted_moves)
                     }
                 }
             )
+            i = 0
+            for m in pgn_parsed.formatted_moves:
+                i = i + 1
+                pk = game_id[0] + m['clk'] + m['color']
 
+                formatted_rows_list.append(
+                    {
+                        'model': 'client.Move',
+                        'pk': str(hashlib.md5(pk.encode()).digest()),
+                        'fields': {
+                            'number': m['number'],
+                            'clk': m['clk'],
+                            'piece': m['piece'],
+                            'color': m['color'],
+                            'game_id': game_id[0],
+                            'is_check': m['is_check'],
+                            'is_checkmate': m['is_checkmate'],
+                            'is_take': m['is_take'],
+                            'san': m['san'],
+                            'order': i
+                        }
+                    }
+                )
         with open('client/fixtures/games_' + listperiod[1] + '_' + listperiod[0] + '.json', 'w') as jsonfile:
             json.dump(formatted_rows_list, jsonfile)
         self.stdout.write(self.style.SUCCESS('Successfully generated fixture for ' + options['period']))

@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Gets data for all months from chess.com API and export them to DB'
 
     def add_arguments(self, parser):
-        parser.add_argument('period', type=str, help='MM/YYYY, example 07/2021')
+        parser.add_argument('--period', type=str, help='MM/YYYY, example 07/2021')
 
     def handle(self, *args, **options):
         if options['period']:

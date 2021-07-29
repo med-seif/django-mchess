@@ -1,4 +1,5 @@
 from django.db import models
+#from django.db.models import UniqueConstraint
 
 
 class Game(models.Model):
@@ -19,6 +20,27 @@ class Game(models.Model):
     eco = models.CharField(max_length=10, null=True)
     eco_url = models.CharField(max_length=300, null=True)
     termination = models.CharField(max_length=100, null=True)
+    moves_number = models.IntegerField(null=True)
 
     class Meta:
         db_table = 'game'
+
+
+class Move(models.Model):
+    id = models.CharField(primary_key=True,max_length=16)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    number = models.IntegerField()
+    clk = models.TimeField()
+    piece = models.CharField(max_length=2, null=True)
+    san = models.CharField(max_length=15, null=True)
+    color = models.CharField(max_length=1, null=True)
+    is_take = models.IntegerField(null=True)
+    is_check = models.IntegerField(null=True)
+    is_checkmate = models.IntegerField(null=True)
+    order=models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'move'
+        #constraints = [
+        #    UniqueConstraint(fields=['game', 'number'], name='unique_move')
+        #]

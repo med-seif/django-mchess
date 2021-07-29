@@ -18,14 +18,15 @@ services:
     depends_on:
       - db
   db:
-    image: postgres
+    image: percona:5.7
     ports:
-      - "5432:5432"
-    volumes:
-      - dbdata:/var/lib/postgresql/data
+      - "3306:3306"
     environment:
-      - POSTGRES_DB=mchess
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mchess
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+    volumes:
+      - dbdata:/var/lib/mysql
 volumes:
   dbdata:
