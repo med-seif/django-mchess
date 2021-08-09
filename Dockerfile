@@ -8,6 +8,6 @@ WORKDIR ./code
 
 RUN python -m pip install --upgrade pip
 
-RUN python -m pip install Django requests chess.com django-seed matplotlib pgn_parser pycountry mysqlclient tqdm
+RUN python -m pip install Django requests chess.com django-seed matplotlib scipy pgn_parser pycountry mysqlclient tqdm
 
 EXPOSE 8000

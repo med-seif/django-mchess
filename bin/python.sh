@@ -1,1 +1,1 @@
-docker exec django python "$1"
+docker  exec -it django python "$1"

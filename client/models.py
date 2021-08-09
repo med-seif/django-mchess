@@ -25,9 +25,11 @@ class Game(models.Model):
     class Meta:
         db_table = 'game'
 
+    def __str__(self):
+        return f"{self.id}, {self.moves_number}"
 
 class Move(models.Model):
-    id = models.CharField(primary_key=True,max_length=16)
+    id = models.CharField(primary_key=True, max_length=32)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     number = models.IntegerField()
     clk = models.TimeField()
@@ -41,6 +43,3 @@ class Move(models.Model):
 
     class Meta:
         db_table = 'move'
-        #constraints = [
-        #    UniqueConstraint(fields=['game', 'number'], name='unique_move')
-        #]

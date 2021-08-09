@@ -42,7 +42,7 @@ class Command(BaseCommand):
                     if win_result_v == termination:
                         return win_result_k
 
-            if gdata.black.username == 'Seiftn':
+            if gdata.black.username == settings.PLAYER_USERNAME:
                 return format_win_result(gdata.black.result, pgn_parsed_data)
             else:
                 return format_win_result(gdata.white.result, pgn_parsed_data)
@@ -85,13 +85,9 @@ class Command(BaseCommand):
             country_url_api_parts.reverse()
             return country_url_api_parts[0]
 
-        def format_game_moves():
-            pass
-
         listperiod = options['period'].split('/')
         data = chessdotcom.get_player_games_by_month('seiftn', listperiod[1], listperiod[0])
         formatted_rows_list = []
-        formatted_move_rows_list = []
         for g in data.games:
             pgn_parsed = pgn_parser_proxy.parse(g.pgn)
             game_id = g.url.split('/')
@@ -129,7 +125,7 @@ class Command(BaseCommand):
                 formatted_rows_list.append(
                     {
                         'model': 'client.Move',
-                        'pk': str(hashlib.md5(pk.encode()).digest()),
+                        'pk': str(hashlib.md5(pk.encode()).hexdigest()),
                         'fields': {
                             'number': m['number'],
                             'clk': m['clk'],

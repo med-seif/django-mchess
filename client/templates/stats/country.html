@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load custom_tags_filters %}
+{% block content %}
+    <h1>Stats</h1>
+    <table style="float: left">
+        <thead>
+        <tr>
+            <th>Country</th>
+            <th>Number of games</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for game in games_per_countries %}
+            <tr>
+                <td>{% show_country_flag game.opponent_country 32 %}</td>
+                <td>{{ game.count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% load static %}
+    <img style="float: left" src="{% static 'img/plot3.png' %}"/>
+    <img style="float: left" src="{% static 'img/plot4.png' %}"/>
+{% endblock %}
+
