@@ -1,5 +1,4 @@
 from django.db import models
-#from django.db.models import UniqueConstraint
 
 
 class Game(models.Model):
@@ -21,12 +20,14 @@ class Game(models.Model):
     eco_url = models.CharField(max_length=300, null=True)
     termination = models.CharField(max_length=100, null=True)
     moves_number = models.IntegerField(null=True)
+    user = models.CharField(max_length=30, null=True)
 
     class Meta:
         db_table = 'game'
 
     def __str__(self):
         return f"{self.id}, {self.moves_number}"
+
 
 class Move(models.Model):
     id = models.CharField(primary_key=True, max_length=32)
@@ -39,7 +40,7 @@ class Move(models.Model):
     is_take = models.IntegerField(null=True)
     is_check = models.IntegerField(null=True)
     is_checkmate = models.IntegerField(null=True)
-    order=models.IntegerField(null=True)
+    order = models.IntegerField(null=True)
 
     class Meta:
         db_table = 'move'

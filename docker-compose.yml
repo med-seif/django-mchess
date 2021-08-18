@@ -3,22 +3,35 @@
 version: "3"
 
 services:
-  web:
-    container_name: django
+  server:
+    container_name: mchess_nginx
     build:
-      context: .
+      context: ./docker_images/nginx
       args:
-        PYTHON_VERSION: 3.8.10
+        NGINX_VERSION: 1.18
     ports:
       - "80:8000"
       - "443:8443"
     volumes:
+      - .:/var/www/mchess
+      - ssldata:/etc/nginx/certs
+    depends_on:
+      - db
+      - web
+  web:
+    container_name: mchess_django
+    build:
+      context: ./docker_images/python
+      args:
+        PYTHON_VERSION: 3.8.10
+    volumes:
       - .:/code
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "uwsgi --ini mchess_uwsgi.ini"
     depends_on:
       - db
   db:
-    image: percona:5.7
+    container_name: mchess_db
+    image: mysql:5.7
     ports:
       - "3306:3306"
     environment:
@@ -30,3 +43,4 @@ services:
       - dbdata:/var/lib/mysql
 volumes:
   dbdata:
+  ssldata:

@@ -1,1 +1,70 @@
 {% extends "admin/base_site.html" %}
+{% load custom_tags_filters %}
+{% load static %}}
+{% block content %}
+    {{ block.super }}
+    <table style="width: 100%">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>checkmate</td>
+            <td>{{ games_per_result.count_win_checkmate }}</td>
+        </tr>
+        <tr>
+            <td>time</td>
+            <td>{{ games_per_result.count_win_time }}</td>
+        </tr>
+        <tr>
+            <td>resignation</td>
+            <td>{{ games_per_result.count_win_resignation }}</td>
+        </tr>
+        <tr>
+            <td>abandonment</td>
+            <td>{{ games_per_result.count_win_abandonment }}</td>
+        </tr>
+        <tr>
+            <td>checkmated</td>
+            <td>{{ games_per_result.count_loose_checkmated }}</td>
+        </tr>
+        <tr>
+            <td>timeout</td>
+            <td>{{ games_per_result.count_loose_timeout }}</td>
+        </tr>
+        <tr>
+            <td>resigned</td>
+            <td>{{ games_per_result.count_loose_resigned }}</td>
+        </tr>
+        <tr>
+            <td>agreed</td>
+            <td>{{ games_per_result.count_draw_agreed }}</td>
+        </tr>
+        <tr>
+            <td>insufficient</td>
+            <td>{{ games_per_result.count_draw_insufficient }}</td>
+        </tr>
+        <tr>
+            <td>stalemate</td>
+            <td>{{ games_per_result.count_draw_stalemate }}</td>
+        </tr>
+        <tr>
+            <td>time vs insufficient</td>
+            <td>{{ games_per_result.count_draw_timevsinsufficient }}</td>
+        </tr>
+        <tr>
+            <td>repetition</td>
+            <td>{{ games_per_result.count_draw_repetition }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <img style="float: left" src="{% static img %}"/>
+        <img style="float: left" src="{% static 'img/plot4.png' %}"/>
+        <img style="float: left" src="{% static 'img/plot4.png' %}"/>
+    </div>
+{% endblock %}
+

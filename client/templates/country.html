@@ -1,1 +1,6 @@
-<img title="{{ country_name }}" src="{{ country_flag }}" />
+{% if country_code %}
+    <span>{{ country_code }}</span>
+{% else %}
+    <img title="{{ country_name }}" src="{{ country_flag }}" />
+{% endif %}
+

@@ -1,1 +1,35 @@
 {% extends "admin/base_site.html" %}
+{% block content %}
+    <table style="width: 100%">
+        <thead>
+        <tr>
+            <th>ECO</th>
+            <th>Number of games</th>
+            <th>Avg Opp rating</th>
+            <th>Win</th>
+            <th>Black</th>
+            <th>White</th>
+            <th>Loose</th>
+            <th>Black</th>
+            <th>White</th>
+            <th>Draw</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in games_per_eco %}
+            <tr>
+                <td>{{ row.eco }}</td>
+                <td>{{ row.count }}</td>
+                <td>{{ row.avg_opponent_rating | floatformat:'0' }}</td>
+                <td>{{ row.count_win }}</td>
+                <td>{{ row.count_win_white }}</td>
+                <td>{{ row.count_win_black }}</td>
+                <td>{{ row.count_loose }}</td>
+                <td>{{ row.count_loose_white }}</td>
+                <td>{{ row.count_loose_black }}</td>
+                <td>{{ row.count_draw }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

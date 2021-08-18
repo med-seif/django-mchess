@@ -1,25 +1,29 @@
 {% extends "admin/base_site.html" %}
 {% load custom_tags_filters %}
 {% block content %}
-    <h1>Stats</h1>
-    <table style="float: left">
+    <table style="width: 100%">
         <thead>
         <tr>
             <th>Country</th>
             <th>Number of games</th>
+            <th>Avg Opp rating</th>
+            <th>Win</th>
+            <th>Loose</th>
+            <th>Draw</th>
         </tr>
         </thead>
         <tbody>
-        {% for game in games_per_countries %}
+        {% for row in games_per_countries %}
             <tr>
-                <td>{% show_country_flag game.opponent_country 32 %}</td>
-                <td>{{ game.count }}</td>
+                <td>{% show_country_flag row.opponent_country 16 %}</td>
+                <td>{{ row.count }}</td>
+                <td>{{ row.avg_opponent_rating | floatformat:'0' }}</td>
+                <td>{{ row.count_win }}</td>
+                <td>{{ row.count_loose }}</td>
+                <td>{{ row.count_draw }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {% load static %}
-    <img style="float: left" src="{% static 'img/plot3.png' %}"/>
-    <img style="float: left" src="{% static 'img/plot4.png' %}"/>
 {% endblock %}
 
