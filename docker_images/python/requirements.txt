@@ -1,0 +1,11 @@
+Django
+requests
+chess.com
+django-seed
+matplotlib
+scipy
+pgn_parser
+pycountry
+mysqlclient
+tqdm
+uwsgi

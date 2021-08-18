@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% block extrahead %}
+    {% load static %}
+    {{ block.super }}
+    <script src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bower_components/vue/dist/vue.js' %}"></script>
+    <script src="{% static 'bower_components/underscore/underscore.js' %}"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!Notification) {
+                alert('Desktop notifications not available in your browser. Try Chromium.');
+                return;
+            }
+            if (Notification.permission !== 'granted')
+                Notification.requestPermission();
+        });
+    </script>
+{% endblock %}
+{% block content %}
+    {{ block.super }}
+    <div id="daily-chess" icon="{% static 'img/knight.png' %}">
+        <move v-bind:tomoves="tomoves"></move>
+    </div>
+    <script src="{% static 'js/admin_base.js' %}"></script>
+{% endblock %}
