@@ -15,12 +15,14 @@ class Game(models.Model):
     my_color = models.CharField(max_length=1, null=True)
     result = models.CharField(max_length=20, null=True)
     result_detail = models.CharField(max_length=20, null=True)
-    pgn = models.TextField()
+    pgn = models.TextField(db_collation='utf8_general_ci')
     eco = models.CharField(max_length=10, null=True)
     eco_url = models.CharField(max_length=300, null=True)
     termination = models.CharField(max_length=100, null=True)
     moves_number = models.IntegerField(null=True)
     user = models.CharField(max_length=30, null=True)
+    my_accuracy = models.FloatField(null=True)
+    opponent_accuracy = models.FloatField(null=True)
 
     class Meta:
         db_table = 'game'
@@ -33,7 +35,7 @@ class Move(models.Model):
     id = models.CharField(primary_key=True, max_length=32)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     number = models.IntegerField()
-    clk = models.TimeField()
+    clk = models.CharField(max_length=12)
     piece = models.CharField(max_length=2, null=True)
     san = models.CharField(max_length=15, null=True)
     color = models.CharField(max_length=1, null=True)

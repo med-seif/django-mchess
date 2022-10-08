@@ -9,3 +9,4 @@ pycountry
 mysqlclient
 tqdm
 uwsgi
+pytz

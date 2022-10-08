@@ -6,6 +6,7 @@ from client.modules.proxy import pgn_parser_proxy
 from pytz import timezone
 from django.conf import settings
 import hashlib
+from pprint import pprint
 
 class Command(BaseCommand):
     help = 'Generates a monthly archive in JSON ready file to be loaded in database with loaddata python command'
@@ -22,6 +23,18 @@ class Command(BaseCommand):
 
         def get_opponent_rating(gdata):
             return gdata.white.rating if gdata.black.username == settings.PLAYER_USERNAME else gdata.black.rating
+        
+        def get_my_accuracy(gdata):
+            try:
+                return gdata.accuracies.black if gdata.black.username == settings.PLAYER_USERNAME else gdata.accuracies.white
+            except AttributeError:
+                return None            
+
+        def get_opponent_accuracy(gdata):
+            try:
+                return gdata.accuracies.white if gdata.black.username == settings.PLAYER_USERNAME else gdata.accuracies.black
+            except AttributeError:
+                return None               
 
         def get_opponent_username(gdata):
             return gdata.white.username if gdata.black.username == settings.PLAYER_USERNAME else gdata.black.username
@@ -65,10 +78,16 @@ class Command(BaseCommand):
             return pgn_parsed_data.tag_pairs['Termination']
 
         def get_eco(pgn_parsed_data):
-            return pgn_parsed_data.tag_pairs['ECO']
+            try:
+                return pgn_parsed_data.tag_pairs['ECO']
+            except (IndexError, KeyError):
+                return None
 
         def get_eco_url(pgn_parsed_data):
-            return pgn_parsed_data.tag_pairs['ECOUrl']
+            try:
+                return pgn_parsed_data.tag_pairs['ECOUrl']
+            except (IndexError, KeyError):
+                return None            
 
         def get_game_date_time(pgn_parsed_data, utc_date_key, utc_time_key, date_time_format):
             utc_date_key = pgn_parsed_data.tag_pairs[utc_date_key]
@@ -113,7 +132,9 @@ class Command(BaseCommand):
                         'game_end_time': get_game_date_time(pgn_parsed, 'EndDate', 'EndTime', '%H:%M:%S'),
                         'game_date': get_game_date_time(pgn_parsed, 'UTCDate', 'UTCTime', '%Y-%m-%d'),
                         'game_time': get_game_date_time(pgn_parsed, 'UTCDate', 'UTCTime', '%H:%M:%S'),
-                        'moves_number' : len(pgn_parsed.formatted_moves)
+                        'moves_number' : len(pgn_parsed.formatted_moves),
+                        'my_accuracy': get_my_accuracy(g),
+                        'opponent_accuracy': get_opponent_accuracy(g),
                     }
                 }
             )
@@ -141,5 +162,5 @@ class Command(BaseCommand):
                     }
                 )
         with open('client/fixtures/games_' + listperiod[1] + '_' + listperiod[0] + '.json', 'w') as jsonfile:
-            json.dump(formatted_rows_list, jsonfile)
+            json.dump(formatted_rows_list, jsonfile, ensure_ascii=False)
         self.stdout.write(self.style.SUCCESS('Successfully generated fixture for ' + options['period']))

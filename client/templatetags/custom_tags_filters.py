@@ -13,6 +13,6 @@ def show_country_flag(code, w=24):
         }
     return {
         'country_name': country_name,
-        'country_flag': "https://www.countryflags.io/" + code + "/flat/" + str(w) + ".png" if country_name != 'None' else '#'
+        'country_flag': "https://flagcdn.com/" + str(w) + 'x12/' + code.lower() + ".png" if country_name != 'None' else '#'
     }
 
