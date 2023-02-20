@@ -16,6 +16,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(
                 'Data for period [' + options['period'] + '] was pulled and loaded successfully in database'))
         else:
-            management.call_command('loadallarchives')
-            management.call_command('loadalldata')
+            management.call_command('generateallfixtures')
+            management.call_command('loadalldata') 
             self.stdout.write(self.style.SUCCESS('All data was pulled and loaded successfully in database'))

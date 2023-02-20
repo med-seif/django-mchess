@@ -7,7 +7,8 @@ class Game(models.Model):
     game_time = models.TimeField(null=True)
     game_end_date = models.DateField(null=True)
     game_end_time = models.TimeField(null=True)
-    time_class = models.CharField(max_length=10)
+    time_class = models.CharField(max_length=10, null=True)
+    time_control = models.CharField(max_length=10, null=True)
     opponent_rating = models.PositiveIntegerField()
     opponent_username = models.CharField(max_length=50)
     opponent_country = models.CharField(max_length=2, null=True)
@@ -23,6 +24,9 @@ class Game(models.Model):
     user = models.CharField(max_length=30, null=True)
     my_accuracy = models.FloatField(null=True)
     opponent_accuracy = models.FloatField(null=True)
+    site = models.CharField(max_length=50,null=True)
+    variant = models.CharField(max_length=10,null=True)
+    url = models.CharField(max_length=150,null=True)
 
     class Meta:
         db_table = 'game'

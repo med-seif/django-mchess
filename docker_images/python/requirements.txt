@@ -10,3 +10,5 @@ mysqlclient
 tqdm
 uwsgi
 pytz
+berserk
+progress

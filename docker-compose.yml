@@ -1,6 +1,6 @@
 #https://docs.docker.com/samples/django/
 
-version: "3"
+version: "3.9"
 
 services:
   server:
