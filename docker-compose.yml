@@ -4,7 +4,6 @@ version: "3.9"
 
 services:
   server:
-    container_name: mchess_nginx
     build:
       context: ./docker_images/nginx
       args:
@@ -19,7 +18,6 @@ services:
       - db
       - web
   web:
-    container_name: mchess_django
     build:
       context: ./docker_images/python
       args:
@@ -30,7 +28,6 @@ services:
     depends_on:
       - db
   db:
-    container_name: mchess_db
     image: mysql:5.7
     ports:
       - "3306:3306"
