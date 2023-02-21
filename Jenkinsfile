@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'docker-compose -p "mchess_prod" up -d'
                 echo 'Deploying....'
             }
         }
