@@ -4,6 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                echo "${WORKSPACE}"
                 sh 'php -v'
             }
         }
